@@ -7,6 +7,7 @@ import {ProjectCard} from "./ProjectCard";
 export function Projects() {
 
     const projects = useSelector<AppRootStateType, Array<ProjectsType>>(state => state.projects)
+
     const dispatch = useAppDispatch()
 
     const addProjectHandler = (title: string) => {
@@ -18,6 +19,7 @@ export function Projects() {
             название проекта:
             <input></input>
             <button onClick={() => addProjectHandler('test')}>+</button>
+
             <div>
                 {projects.map(p => <ProjectCard key={p.id}
                                                 title={p.title}

@@ -3,11 +3,12 @@ import thunk, {ThunkDispatch} from "redux-thunk";
 import {useDispatch} from "react-redux";
 import {configureStore} from "@reduxjs/toolkit";
 import {useMemo} from "react";
-
 import {projectsReducer} from "../Features/projects-reducer";
+import {tasksReducer} from "../Features/tasks-reducer";
 
 export const rootReducer = combineReducers({
-    projects: projectsReducer
+    projects: projectsReducer,
+    tasks: tasksReducer
 })
 
 export const store = configureStore({

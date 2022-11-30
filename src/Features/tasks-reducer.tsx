@@ -1,13 +1,16 @@
-import {Dispatch} from "redux";
 
-const initialState: any = [
-    {id: '100', title: 'test'}
+const initialState: Array<TasksType> = [
+    {id: '100', title: 'test 1', taskNumber: 1, status: "Queue"},
+    {id: '200', title: 'test 2', taskNumber: 2, status: "Development"},
+    {id: '300', title: 'test 3', taskNumber: 3, status: "Queue"},
 ]
 
-export const projectsReducer = (state: Array<ProjectsType> = initialState, action: ActionType): Array<ProjectsType> => {
+export type TaskStatusType = 'Queue' | 'Development' | 'Done'
+
+export const tasksReducer = (state: Array<TasksType> = initialState, action: ActionType): Array<TasksType> => {
     switch (action.type) {
-        case 'PROJECTS/ADD-PROJECT':
-            return [{id: '1', title: action.title} ,...state]
+        case 'TASK/ADD-TASK':
+            return [{id: '1', title: action.title, taskNumber: 3, status: "Queue"} ,...state]
         default:
             return state
     }
@@ -15,8 +18,8 @@ export const projectsReducer = (state: Array<ProjectsType> = initialState, actio
 
 // actions
 
-export const addProjectAC = (title: string) =>
-    ({type: 'PROJECTS/ADD-PROJECT', title} as const)
+export const addTaskAC = (title: string) =>
+    ({type: 'TASK/ADD-TASK', title} as const)
 
 // thunks
 
@@ -55,8 +58,10 @@ export const changeTodolistTitleTC = (id: string, title: string) => (dispatch: D
 //types
 
 type ActionType =
-    | ReturnType<typeof addProjectAC>
-export type ProjectsType = {
-    title: string,
+    | ReturnType<typeof addTaskAC>
+export type TasksType = {
+    title: string
     id: string
+    taskNumber: number,
+    status: TaskStatusType
 }
