@@ -1,6 +1,6 @@
 import React from 'react';
-import {TaskStatusType, TasksType} from "../Features/tasks-reducer";
-import {Task} from "./TasksPage";
+import {TaskStatusType, TasksType} from "../../Features/tasks-reducer";
+import {Task} from "./task";
 
 type TaskListPropsType = {
     tasks: Array<TasksType>
@@ -16,6 +16,8 @@ export const TasksList = ({tasks, status}: TaskListPropsType) => {
                                  id={el.id}
                                  title={el.title}
                                  taskNumber={el.taskNumber}
+                                 priority={el.priority}
+                                 lifeCycleTime={el.lifeCycleTime}
                     />
                 })
             }
