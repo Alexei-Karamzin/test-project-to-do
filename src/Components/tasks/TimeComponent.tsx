@@ -2,10 +2,11 @@ import React, {useState} from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {Box, Modal, Typography} from "@mui/material";
 import {TimeType} from "../../Features/tasks-reducer";
+import { format } from "date-fns"
 
 type TimeComponentPropsTime = {
     id: string
-    timeData: TimeType
+    timeData: any
 }
 
 const style = {
@@ -13,15 +14,17 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 300,
     bgcolor: 'background.paper',
     border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
+    boxShadow: 20,
+    p: 3,
 };
 
-export const TimeComponent = ({id}: TimeComponentPropsTime) => {
+export const TimeComponent = ({id, timeData}: TimeComponentPropsTime) => {
     const [openTime, setOpenTime] = useState(false)
+    const createDate = format(timeData, 'dd/MM/yy')
+    const createTime = format(timeData, 'hh:mm')
 
     const getTimeHandler = (id: string) => setOpenTime(true)
 
@@ -37,10 +40,10 @@ export const TimeComponent = ({id}: TimeComponentPropsTime) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-description" sx={{mt: 2}}>
-                    Create date: 
+                    Create date: {createDate} || {createTime}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{mt: 2}}>
-                    date of completion: TIME
+                    date of completion:
                 </Typography>
                 <Typography id="modal-modal-description" sx={{mt: 2}}>
                     time at work: TIME
