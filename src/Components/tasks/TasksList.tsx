@@ -12,12 +12,13 @@ export const TasksList = ({tasks, status}: TaskListPropsType) => {
         <div style={{border: '1px solid black', minHeight: '200px', marginTop: '5px'}}>
             {
                 tasks.map((el) => {
-                    return <Task key={el.id}
-                                 id={el.id}
+                    return <Task key={el.taskId}
+                                 id={el.taskId}
                                  title={el.title}
                                  taskNumber={el.taskNumber}
                                  priority={el.priority}
                                  lifeCycleTime={el.lifeCycleTime}
+                                 description={el.description}
                     />
                 })
             }

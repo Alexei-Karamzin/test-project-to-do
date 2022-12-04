@@ -1,10 +1,11 @@
-import React from "react";
-import {Grid} from "@mui/material";
+import React, {useState} from "react";
+import {Box, Divider, Grid, Modal, Stack, Typography} from "@mui/material";
 import {AppRootStateType, useAppDispatch} from "../../App/store";
 import {addTaskAC, TasksType} from "../../Features/tasks-reducer";
 import {useSelector} from "react-redux";
 import {TasksList} from "./TasksList";
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import {format, formatDistance, formatRelative, subDays} from 'date-fns'
+import {useParams} from "react-router-dom";
 
 //console.log(format(new Date(), "'Today is a' eee"))
 //=> "Today is a Saturday"
@@ -15,18 +16,42 @@ import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 //console.log(formatRelative(subDays(new Date(), 3), new Date()))
 //=> "last Friday at 7:26 p.m."
 
-type TasksPropsType = {}
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 300,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 20,
+    p: 3,
+};
 
-export function TasksPage(props: TasksPropsType) {
+type TasksPropsType = {
+
+}
+
+export function TasksPage({}: TasksPropsType) {
+
+    const [openModal, setOpenModal] = useState(false)
+    const [taskTitle, setTaskTitle] = useState('')
+    const [taskDescription, setTaskDescription] = useState('')
+    const params = useParams<'projectId'>()
 
     const tasks = useSelector<AppRootStateType, Array<TasksType>>(state => state.tasks)
     const dispatch = useAppDispatch()
 
-    const addTaskHandler = (title: string) => {
+    const addTaskHandler = (title: string, taskDescription: string) => {
         const timeData = new Date()
 
-        dispatch(addTaskAC(title, timeData))
+        dispatch(addTaskAC('', title, timeData, taskDescription))
+        setTaskTitle('')
+        setTaskDescription('')
+        setOpenModal(false)
     }
+
+    const closeModalHandler = () => setOpenModal(false)
 
     const QueueTasks = tasks.filter(el => el.status === "Queue")
     const DevelopmentTasks = tasks.filter(el => el.status === "Development")
@@ -36,12 +61,31 @@ export function TasksPage(props: TasksPropsType) {
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <button onClick={() => {
-                        addTaskHandler('new test')
-                    }}>add task
+                    <button onClick={() => setOpenModal(true)}>add task
                     </button>
                 </Grid>
+
             </Grid>
+            <Modal
+                open={openModal}
+                onClose={closeModalHandler}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-description" sx={{mt: 2}}>
+                        <div>
+                            set task title:
+                            <input value={taskTitle} onChange={(e) => setTaskTitle(e.currentTarget.value)}/>
+                        </div>
+                        <div>
+                            set description:
+                            <input value={taskDescription} onChange={(e) => setTaskDescription(e.currentTarget.value)}/>
+                        </div>
+                        <button onClick={() => addTaskHandler(taskTitle, taskDescription)}>add</button>
+                    </Typography>
+                </Box>
+            </Modal>
             <Grid container spacing={2} style={{paddingTop: "15px"}}>
                 <Grid item xs={4}>
                     <TasksList tasks={QueueTasks}
@@ -63,4 +107,3 @@ export function TasksPage(props: TasksPropsType) {
 
     )
 }
-

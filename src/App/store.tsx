@@ -1,10 +1,10 @@
-import {ActionCreatorsMapObject, AnyAction, bindActionCreators, combineReducers} from "redux";
+import {AnyAction, combineReducers} from "redux";
 import thunk, {ThunkDispatch} from "redux-thunk";
 import {useDispatch} from "react-redux";
 import {configureStore} from "@reduxjs/toolkit";
-import {useMemo} from "react";
 import {projectsReducer} from "../Features/projects-reducer";
 import {tasksReducer} from "../Features/tasks-reducer";
+import {saveState, loadState} from "../utils/localStorage-utils";
 
 export const rootReducer = combineReducers({
     projects: projectsReducer,
@@ -13,8 +13,16 @@ export const rootReducer = combineReducers({
 
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunk)
+    //loadState(),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunk),
 })
+
+store.subscribe(() => {
+    saveState({
+        projects: store.getState().projects,
+        tasks: store.getState().tasks
+    });
+});
 
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
 
@@ -26,14 +34,3 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 
 // @ts-ignore
 window.store = store
-
-/*
-export function useActions<T extends ActionCreatorsMapObject>(action: T) {
-    const dispatch = useAppDispatch()
-
-    const boundActions = useMemo(() => {
-        return bindActionCreators(action, dispatch)
-    }, [])
-
-    return boundActions
-}*/

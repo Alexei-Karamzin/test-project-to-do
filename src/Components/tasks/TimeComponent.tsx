@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import {Box, Modal, Typography} from "@mui/material";
+import {Box, Modal, Tooltip, Typography} from "@mui/material";
 import {TimeType} from "../../Features/tasks-reducer";
 import { format } from "date-fns"
 
@@ -31,7 +31,9 @@ export const TimeComponent = ({id, timeData}: TimeComponentPropsTime) => {
     const closeTimeHandler = () => setOpenTime(false)
 
     return <>
-        <AccessTimeIcon onClick={() => getTimeHandler(id)}/>
+        <Tooltip title="time" arrow>
+            <AccessTimeIcon onClick={() => getTimeHandler(id)}/>
+        </Tooltip>
         <Modal
             open={openTime}
             onClose={closeTimeHandler}

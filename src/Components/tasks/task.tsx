@@ -1,11 +1,11 @@
 import {PriorityType, TimeType} from "../../Features/tasks-reducer";
-import {Box, Card, CardActions, CardContent, Modal, Typography} from "@mui/material";
+import {Box, Card, CardActions, CardContent, Tooltip, Typography} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import React, {useState} from "react";
+import React from "react";
 import {TimeComponent} from "./TimeComponent";
+import {RatingUtils} from "../../utils/RatingUtils";
 
 type TaskPropsType = {
     id: string
@@ -13,10 +13,10 @@ type TaskPropsType = {
     taskNumber: number
     priority: PriorityType
     lifeCycleTime: TimeType
+    description: string
 }
 
-export const Task = ({id, title, taskNumber, priority, lifeCycleTime}: TaskPropsType) => {
-
+export const Task = ({id, title, taskNumber, priority, lifeCycleTime, description}: TaskPropsType) => {
 
     const changeTaskPriority = () => {
 
@@ -28,34 +28,33 @@ export const Task = ({id, title, taskNumber, priority, lifeCycleTime}: TaskProps
                 <Typography style={{display: "flex", justifyContent: "space-between"}} sx={{fontSize: 12}}
                             color="text.secondary" gutterBottom>
                     <span>task number: {taskNumber}</span>
-                    <TimeComponent id={id} timeData={lifeCycleTime}/>
+                        <TimeComponent id={id} timeData={lifeCycleTime}/>
                 </Typography>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div>
                         <Typography variant="h5" component="div">
                             {title}
-                        </Typography>17897477
+                        </Typography>
                         <Typography sx={{mb: 1.5}} color="text.secondary">
-                            description: BLA BLA
+                            description: {description}
                         </Typography>
                         <Typography variant="body2">
-                            well meaning and kindly.
-                            <br/>
-                            {'"a benevolent smile"'}
+
+                            subtasks
                         </Typography>
                     </div>
                     <div>
                         priority:
                         <div>
-                            {priority === "Low" && <div><ErrorIcon/><ErrorOutlineIcon/><ErrorOutlineIcon/></div>}
-                            {priority === "middle" && <div><ErrorIcon/><ErrorIcon/><ErrorOutlineIcon/></div>}
-                            {priority === "High" && <div><ErrorIcon/><ErrorIcon/><ErrorIcon/></div>}
+                            <RatingUtils id={id} priority={priority} />
                         </div>
                     </div>
                 </div>
             </CardContent>
             <CardActions>
-                <InsertCommentIcon/>
+                <Tooltip title="open comments" arrow>
+                    <InsertCommentIcon/>
+                </Tooltip>
             </CardActions>
         </Card>
 

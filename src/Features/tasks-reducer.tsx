@@ -1,3 +1,4 @@
+import {v1} from "uuid";
 
 const timeObject = {
     createDate: '',
@@ -17,15 +18,17 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
     switch (action.type) {
         case 'TASK/ADD-TASK':
             return [{
-                id: '1',
+                projectId: action.projectId,
+                taskId: v1(),
                 title: action.title,
                 taskNumber: 3,
                 status: "Queue",
-                priority: "Low",
-                lifeCycleTime: action.timeData
+                priority: 1,
+                lifeCycleTime: action.timeData,
+                description: action.taskDescription
             }, ...state]
         case "TASK/CHANGE-TASK-PRIORITY":
-        /*return [{...state, ...state.find(el => el.id === action.id ? el.priority = action.newPriority)}]*/
+            return state.map(ts => ts.taskId === action.id ? {...ts, priority: action.newPriority} : ts)
         default:
             return state
     }
@@ -33,7 +36,7 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
 
 // actions
 
-export const addTaskAC = (title: string, timeData: any) => {
+export const addTaskAC = (projectId: string, title: string, timeData: any, taskDescription: string) => {
 
     /*let day = timeData.getDate()
     let month = timeData.getMonth()
@@ -43,11 +46,13 @@ export const addTaskAC = (title: string, timeData: any) => {
 
     let timeNewData = {day, month, year, hours, minutes}*/
 
+    localStorage.setItem('new task', '')
+
     return {
-        type: 'TASK/ADD-TASK', title, timeData
+        type: 'TASK/ADD-TASK', title, timeData, taskDescription, projectId
     } as const
 }
-export const changeTaskPriorityAC = (newPriority: string, id: string) => ({
+export const changeTaskPriorityAC = (newPriority: PriorityType, id: string) => ({
     type: 'TASK/CHANGE-TASK-PRIORITY',
     newPriority,
     id
@@ -57,18 +62,20 @@ export const changeTaskPriorityAC = (newPriority: string, id: string) => ({
 
 //types
 
-export type PriorityType = "Low" | "middle" | "High"
+export type PriorityType = number | null
 
 type ActionType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeTaskPriorityAC>
 export type TasksType = {
     title: string
-    id: string
+    projectId: string
+    taskId: string
     taskNumber: number
     status: TaskStatusType
     priority: PriorityType
     lifeCycleTime: TimeType
+    description: string
 }
 export type TimeType = {
     createDate: any
