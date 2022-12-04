@@ -1,6 +1,6 @@
 import React from 'react';
 import {TaskStatusType, TasksType} from "../../Features/tasks-reducer";
-import {Task} from "./task";
+import {Task} from "./Task";
 
 type TaskListPropsType = {
     tasks: Array<TasksType>

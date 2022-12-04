@@ -32,7 +32,7 @@ export const setProjectsAC = () => {
 }*/
 
 export const setProjectsTC = () => (dispatch: Dispatch<ActionType>) => {
-    localStorage.пуеItem(`project:`)
+    //localStorage.getItem(`project:`)
     //dispatch(addProjectAC(title))
 }
 

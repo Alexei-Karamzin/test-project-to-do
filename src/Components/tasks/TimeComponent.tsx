@@ -23,8 +23,8 @@ const style = {
 
 export const TimeComponent = ({id, timeData}: TimeComponentPropsTime) => {
     const [openTime, setOpenTime] = useState(false)
-    const createDate = format(timeData, 'dd/MM/yy')
-    const createTime = format(timeData, 'hh:mm')
+    //const createDate = format(timeData, 'dd/MM/yy')
+    //const createTime = format(timeData, 'hh:mm')
 
     const getTimeHandler = (id: string) => setOpenTime(true)
 
@@ -42,7 +42,7 @@ export const TimeComponent = ({id, timeData}: TimeComponentPropsTime) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-description" sx={{mt: 2}}>
-                    Create date: {createDate} || {createTime}
+                    Create date: {/*{createDate} || {createTime}*/}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{mt: 2}}>
                     date of completion:

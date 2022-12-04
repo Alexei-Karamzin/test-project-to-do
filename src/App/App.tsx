@@ -16,7 +16,7 @@ export function App() {
                 <Routes>
                     <Route path={'/'} element={<Projects/>}/>
                     <Route path={'/:projectId'} element={<TasksPage/>}/>
-                    <Route path={'/*'} element={<div>404 page note found</div>}/>
+                    {/*<Route path={'/*'} element={<div>404 page note found</div>}/>*/}
                 </Routes>
             </Container>
         </div>

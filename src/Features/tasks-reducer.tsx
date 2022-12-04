@@ -29,6 +29,10 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
             }, ...state]
         case "TASK/CHANGE-TASK-PRIORITY":
             return state.map(ts => ts.taskId === action.id ? {...ts, priority: action.newPriority} : ts)
+        case "TASK/CHANGE-TASK-TITLE":
+            return state.map(ts => ts.taskId === action.taskId ? {...ts, title: action.newText} : ts)
+        case "TASK/DELETE-TASK":
+            return state.filter(ts => ts.taskId !== action.taskId)
         default:
             return state
     }
@@ -36,7 +40,7 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
 
 // actions
 
-export const addTaskAC = (projectId: string, title: string, timeData: any, taskDescription: string) => {
+export const addTaskAC = (projectId: string | undefined, title: string, timeData: any, taskDescription: string) => {
 
     /*let day = timeData.getDate()
     let month = timeData.getMonth()
@@ -46,7 +50,7 @@ export const addTaskAC = (projectId: string, title: string, timeData: any, taskD
 
     let timeNewData = {day, month, year, hours, minutes}*/
 
-    localStorage.setItem('new task', '')
+    //localStorage.setItem('new task', '')
 
     return {
         type: 'TASK/ADD-TASK', title, timeData, taskDescription, projectId
@@ -56,6 +60,15 @@ export const changeTaskPriorityAC = (newPriority: PriorityType, id: string) => (
     type: 'TASK/CHANGE-TASK-PRIORITY',
     newPriority,
     id
+} as const)
+export const changeTaskTitleAC = (taskId: string, newText: string) => ({
+    type: 'TASK/CHANGE-TASK-TITLE',
+    taskId,
+    newText
+} as const)
+export const deleteTaskAC = (taskId: string) => ({
+    type: 'TASK/DELETE-TASK',
+    taskId,
 } as const)
 
 // thunks
@@ -67,9 +80,12 @@ export type PriorityType = number | null
 type ActionType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeTaskPriorityAC>
+    | ReturnType<typeof changeTaskTitleAC>
+    | ReturnType<typeof deleteTaskAC>
+
 export type TasksType = {
     title: string
-    projectId: string
+    projectId: string | undefined
     taskId: string
     taskNumber: number
     status: TaskStatusType

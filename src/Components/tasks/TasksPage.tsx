@@ -5,7 +5,7 @@ import {addTaskAC, TasksType} from "../../Features/tasks-reducer";
 import {useSelector} from "react-redux";
 import {TasksList} from "./TasksList";
 import {format, formatDistance, formatRelative, subDays} from 'date-fns'
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 //console.log(format(new Date(), "'Today is a' eee"))
 //=> "Today is a Saturday"
@@ -28,9 +28,7 @@ const style = {
     p: 3,
 };
 
-type TasksPropsType = {
-
-}
+type TasksPropsType = {}
 
 export function TasksPage({}: TasksPropsType) {
 
@@ -38,6 +36,7 @@ export function TasksPage({}: TasksPropsType) {
     const [taskTitle, setTaskTitle] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
     const params = useParams<'projectId'>()
+    const navigate = useNavigate()
 
     const tasks = useSelector<AppRootStateType, Array<TasksType>>(state => state.tasks)
     const dispatch = useAppDispatch()
@@ -45,7 +44,7 @@ export function TasksPage({}: TasksPropsType) {
     const addTaskHandler = (title: string, taskDescription: string) => {
         const timeData = new Date()
 
-        dispatch(addTaskAC('', title, timeData, taskDescription))
+        dispatch(addTaskAC(params.projectId, title, timeData, taskDescription))
         setTaskTitle('')
         setTaskDescription('')
         setOpenModal(false)
@@ -53,15 +52,22 @@ export function TasksPage({}: TasksPropsType) {
 
     const closeModalHandler = () => setOpenModal(false)
 
-    const QueueTasks = tasks.filter(el => el.status === "Queue")
-    const DevelopmentTasks = tasks.filter(el => el.status === "Development")
-    const DoneTasks = tasks.filter(el => el.status === "Done")
+    const projectTasks = tasks.filter(ts => params.projectId === ts.projectId)
+    console.log(projectTasks)
+
+    const QueueTasks = projectTasks.filter(el => el.status === "Queue")
+    const DevelopmentTasks = projectTasks.filter(el => el.status === "Development")
+    const DoneTasks = projectTasks.filter(el => el.status === "Done")
 
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <button onClick={() => setOpenModal(true)}>add task
+                    <button onClick={() => setOpenModal(true)}>
+                        add task
+                    </button>
+                    <button onClick={() => navigate('/')}>
+                        back to projects
                     </button>
                 </Grid>
 
