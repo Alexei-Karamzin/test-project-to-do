@@ -19,8 +19,7 @@ type uploadedFilesModalPropsType = {
 
 export const UploadedFilesModal = ({editMode}: uploadedFilesModalPropsType) => {
 
-    const [selectedFile, setSelectedFile] = useState<any>(null)
-    const [uploaded, setUploaded] = useState(null)
+
 
     const closeModalHandler = () => {
 

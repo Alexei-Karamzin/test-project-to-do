@@ -1,11 +1,5 @@
 import {v1} from "uuid";
 
-const timeObject = {
-    createDate: '',
-    dateOfCompletion: '',
-    tameAtWork: ''
-}
-
 const initialState: Array<TasksType> = [
     /*{id: '100', title: 'test 1', taskNumber: 1, status: "Queue", priority: "Low", lifeCycleTime: timeObject},
     {id: '200', title: 'test 2', taskNumber: 2, status: "Development", priority: "middle", lifeCycleTime: timeObject},
@@ -21,11 +15,12 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
                 projectId: action.projectId,
                 taskId: v1(),
                 title: action.title,
-                taskNumber: 3,
+                taskNumber: 1,
                 status: "Queue",
                 priority: 1,
                 lifeCycleTime: action.timeData,
-                description: action.taskDescription
+                description: action.taskDescription,
+                subTasks: []
             }, ...state]
         case "TASK/CHANGE-TASK-PRIORITY":
             return state.map(ts => ts.taskId === action.id ? {...ts, priority: action.newPriority} : ts)
@@ -33,6 +28,8 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
             return state.map(ts => ts.taskId === action.taskId ? {...ts, title: action.newText} : ts)
         case "TASK/DELETE-TASK":
             return state.filter(ts => ts.taskId !== action.taskId)
+        case "TASK/ADD-SUB-TASK":
+            return state.map(ts => ts.taskId === action.taskId ? {...ts, subTasks: [{title: action.title, id: v1(), ...ts.subTasks}]} : ts)
         default:
             return state
     }
@@ -41,17 +38,6 @@ export const tasksReducer = (state: Array<TasksType> = initialState, action: Act
 // actions
 
 export const addTaskAC = (projectId: string | undefined, title: string, timeData: any, taskDescription: string) => {
-
-    /*let day = timeData.getDate()
-    let month = timeData.getMonth()
-    let year = timeData.getFullYear()
-    let hours = timeData.getHours()
-    let minutes = timeData.getMinutes()
-
-    let timeNewData = {day, month, year, hours, minutes}*/
-
-    //localStorage.setItem('new task', '')
-
     return {
         type: 'TASK/ADD-TASK', title, timeData, taskDescription, projectId
     } as const
@@ -70,18 +56,21 @@ export const deleteTaskAC = (taskId: string) => ({
     type: 'TASK/DELETE-TASK',
     taskId,
 } as const)
-
-// thunks
+export const addSubTaskAC = (taskId: string, title: string) => {
+    return {
+        type: 'TASK/ADD-SUB-TASK', title, taskId
+    } as const
+}
 
 //types
 
 export type PriorityType = number | null
-
 type ActionType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeTaskPriorityAC>
     | ReturnType<typeof changeTaskTitleAC>
     | ReturnType<typeof deleteTaskAC>
+    | ReturnType<typeof addSubTaskAC>
 
 export type TasksType = {
     title: string
@@ -92,9 +81,14 @@ export type TasksType = {
     priority: PriorityType
     lifeCycleTime: TimeType
     description: string
+    subTasks: Array<SubTaskType>
 }
 export type TimeType = {
     createDate: any
     dateOfCompletion: any
     tameAtWork: any
+}
+export type SubTaskType = {
+    id: string
+    title: string
 }

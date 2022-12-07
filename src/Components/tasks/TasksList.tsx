@@ -19,6 +19,7 @@ export const TasksList = ({tasks, status}: TaskListPropsType) => {
                                  priority={el.priority}
                                  lifeCycleTime={el.lifeCycleTime}
                                  description={el.description}
+                                 subTasks={el.subTasks}
                     />
                 })
             }

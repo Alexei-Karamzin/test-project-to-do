@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {Box, Divider, Grid, Modal, Stack, Typography} from "@mui/material";
+import {Box, Button, Divider, Grid, Modal, Stack, Tooltip, Typography} from "@mui/material";
 import {AppRootStateType, useAppDispatch} from "../../App/store";
 import {addTaskAC, TasksType} from "../../Features/tasks-reducer";
 import {useSelector} from "react-redux";
 import {TasksList} from "./TasksList";
 import {format, formatDistance, formatRelative, subDays} from 'date-fns'
 import {useNavigate, useParams} from "react-router-dom";
+import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 
 //console.log(format(new Date(), "'Today is a' eee"))
 //=> "Today is a Saturday"
@@ -50,6 +51,17 @@ export function TasksPage({}: TasksPropsType) {
         setOpenModal(false)
     }
 
+    const onKeyPressHandler = (e: any, title: string, taskDescription: string) => {
+        if (e.charCode === 13) {
+            const timeData = new Date()
+
+            dispatch(addTaskAC(params.projectId, title, timeData, taskDescription))
+            setTaskTitle('')
+            setTaskDescription('')
+            setOpenModal(false)
+        }
+    }
+
     const closeModalHandler = () => setOpenModal(false)
 
     const projectTasks = tasks.filter(ts => params.projectId === ts.projectId)
@@ -62,15 +74,16 @@ export function TasksPage({}: TasksPropsType) {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <button onClick={() => setOpenModal(true)}>
+                <Grid item xs={12} style={{margin: "8px"}}>
+                    <Tooltip title="back to projects" arrow>
+                        <ReplyAllIcon style={{marginRight: "10px"}} onClick={() => navigate('/')}/>
+                    </Tooltip>
+                    <Button variant="contained"
+                            onClick={() => setOpenModal(true)}
+                    >
                         add task
-                    </button>
-                    <button onClick={() => navigate('/')}>
-                        back to projects
-                    </button>
+                    </Button>
                 </Grid>
-
             </Grid>
             <Modal
                 open={openModal}

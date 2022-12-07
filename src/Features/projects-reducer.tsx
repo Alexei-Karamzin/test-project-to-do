@@ -1,7 +1,5 @@
-import { Dispatch } from "redux";
 import {v1} from "uuid"
 import {TasksType} from "./tasks-reducer";
-import {AppRootStateType} from "../App/store";
 
 const initialState: Array<ProjectsType> = []
 
@@ -9,6 +7,8 @@ export const projectsReducer = (state: Array<ProjectsType> = initialState, actio
     switch (action.type) {
         case "PROJECTS/ADD-PROJECT":
             return [{id: v1(), title: action.title, tasks: []}, ...state]
+        case "PROJECTS/DELETE-PROJECT":
+            return state.filter(pr => pr.id !== action.id)
         case "PROJECTS/SET-PROJECTS":
             return state
         default:
@@ -24,16 +24,11 @@ export const addProjectAC = (title: string) => {
 export const setProjectsAC = () => {
     return {type: 'PROJECTS/SET-PROJECTS'} as const
 }
-
-// thunks
-
-/*export const addProjectTC = (title: string) => (dispatch: Dispatch<ActionType>, getState: () => AppRootStateType) => {
-    dispatch(addProjectAC(title))
-}*/
-
-export const setProjectsTC = () => (dispatch: Dispatch<ActionType>) => {
-    //localStorage.getItem(`project:`)
-    //dispatch(addProjectAC(title))
+export const deleteProjectAC = (id: string) => {
+    return {type: 'PROJECTS/DELETE-PROJECT', id} as const
+}
+export const setTaskCountAC = (id: string) => {
+    return {type: 'PROJECTS/SET-TASK-COUNT', id} as const
 }
 
 //types
@@ -41,6 +36,8 @@ export const setProjectsTC = () => (dispatch: Dispatch<ActionType>) => {
 type ActionType =
     | ReturnType<typeof addProjectAC>
     | ReturnType<typeof setProjectsAC>
+    | ReturnType<typeof deleteProjectAC>
+    | ReturnType<typeof setTaskCountAC>
 
 export type ProjectsType = {
     title: string,

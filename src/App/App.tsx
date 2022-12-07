@@ -10,8 +10,9 @@ export function App() {
 
     return (
         <div>
+            <Header/>
             <Container maxWidth="xl">
-                <Header/>
+
 
                 <Routes>
                     <Route path={'/'} element={<Projects/>}/>
