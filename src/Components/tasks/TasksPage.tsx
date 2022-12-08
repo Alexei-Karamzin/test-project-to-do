@@ -7,6 +7,7 @@ import {TasksList} from "./TasksList";
 import {format, formatDistance, formatRelative, subDays} from 'date-fns'
 import {useNavigate, useParams} from "react-router-dom";
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 
 //console.log(format(new Date(), "'Today is a' eee"))
 //=> "Today is a Saturday"
@@ -65,7 +66,6 @@ export function TasksPage({}: TasksPropsType) {
     const closeModalHandler = () => setOpenModal(false)
 
     const projectTasks = tasks.filter(ts => params.projectId === ts.projectId)
-    console.log(projectTasks)
 
     const QueueTasks = projectTasks.filter(el => el.status === "Queue")
     const DevelopmentTasks = projectTasks.filter(el => el.status === "Development")
@@ -83,6 +83,9 @@ export function TasksPage({}: TasksPropsType) {
                     >
                         add task
                     </Button>
+                    <Tooltip title="search task" arrow>
+                        <ContentPasteSearchIcon />
+                    </Tooltip>
                 </Grid>
             </Grid>
             <Modal
